@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://github.com/Lovecookie/shipcret_server/blob/master/shipcret_background.png" width="200" alt="Nest Logo" /></a>
+  <a href="" target="blank"><img src="https://github.com/Lovecookie/shipcret_server/blob/master/shipcret_background.png" width="400" alt="Shipcret Logo" /></a>
 </p>
 
 <!-- [circleci-image]: https://github.com/Lovecookie/shipcret_server/blob/master/shipcret_background.png
