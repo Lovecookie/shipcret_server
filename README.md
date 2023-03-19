@@ -1,5 +1,6 @@
+## SHIPcret
 <p align="center">
-  <a href="" target="blank"><img src="https://github.com/Lovecookie/shipcret_server/blob/master/shipcret_background.png" width="400" alt="Shipcret Logo" /></a>
+  <a href="" target="blank"><img src="https://github.com/Lovecookie/shipcret_server/blob/master/shipcret_background.png" width="500" alt="Shipcret Logo" /></a>
 </p>
 
 <!-- [circleci-image]: https://github.com/Lovecookie/shipcret_server/blob/master/shipcret_background.png
