@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { FCommonConstants } from 'src/common/common.constants';
 import { DataSource } from 'typeorm';
 import { FDatabaseConstants } from './database.constants';
@@ -9,20 +10,22 @@ import { FUserEntity } from './entitys/users.entity';
 export const accountdbProviders = [
     {
         provide: FDatabaseConstants.DATA_SOURCE,
-        useFactory: async () => {
+        useFactory: async (configServuce: ConfigService) => {
             const dataSource = new DataSource({
                 type: 'mysql',
-                host: process.env.MYSQL_HOST,
-                port: parseInt(process.env.MYSQL_PORT),
-                username: process.env.MYSQL_USER,
-                password: process.env.MYSQL_PASSWORD,
-                database: process.env.ACCOUNT_DB,
+                host: configServuce.get('MYSQL_HOST'),
+                port: configServuce.get('MYSQL_PORT'),
+                username: configServuce.get('MYSQL_USER'),
+                password: configServuce.get('MYSQL_PASSWORD'),
+                database: configServuce.get('ACCOUNT_DB'),
                 entities: [FUserEntity],
-                synchronize: !FCommonConstants.isProduction(),
-                logging: FCommonConstants.isProduction() ? false : 'all',
+                synchronize: !(configServuce.get('SERVER_MODE') == 'dev'),
+                logging:
+                    configServuce.get('SERVER_MODE') == 'dev' ? false : 'all',
             });
 
             return dataSource.initialize();
         },
+        inject: [ConfigService],
     },
 ];
