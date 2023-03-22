@@ -25,7 +25,7 @@ export class FFeedEntity extends FCommonEntity {
     @IsNotEmpty()
     title: string;
 
-    @Column({ type: 'text', comment: 'Feed Content', default: '' })
+    @Column({ type: 'text', comment: 'Feed Content', nullable: false })
     @IsNotEmpty()
     content: string;
 

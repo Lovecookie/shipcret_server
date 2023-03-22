@@ -2,6 +2,7 @@ import {
     Body,
     Controller,
     Get,
+    Post,
     UnauthorizedException,
     UseInterceptors
 } from '@nestjs/common';
@@ -22,10 +23,8 @@ export class FeedsController {
 
     @ApiOperation({ summary: 'create feed' })
     @ApiResponse({})
-    @Get('createFeed')
-    async createFeed(
-        @Body() createDto: FCreateFeedDto
-    ): Promise<FResponseFeedDto> {
+    @Post('create')
+    async create(@Body() createDto: FCreateFeedDto): Promise<FResponseFeedDto> {
         const userEntity = await this.userService.findOneByMail(
             createDto.email
         );

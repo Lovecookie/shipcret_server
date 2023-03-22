@@ -2,6 +2,7 @@ import { ConfigService } from '@nestjs/config';
 import { FCommonConstants } from 'src/common/common.constants';
 import { DataSource } from 'typeorm';
 import { FDatabaseConstants } from './database.constants';
+import { FFeedEntity } from './entitys/feeds.entity';
 import { FUserEntity } from './entitys/users.entity';
 
 /**
@@ -18,14 +19,14 @@ export const accountdbProviders = [
                 username: configServuce.get('MYSQL_USER'),
                 password: configServuce.get('MYSQL_PASSWORD'),
                 database: configServuce.get('ACCOUNT_DB'),
-                entities: [FUserEntity],
+                entities: [FUserEntity, FFeedEntity],
                 synchronize: !(configServuce.get('SERVER_MODE') == 'dev'),
                 logging:
-                    configServuce.get('SERVER_MODE') == 'dev' ? false : 'all',
+                    configServuce.get('SERVER_MODE') == 'dev' ? false : 'all'
             });
 
             return dataSource.initialize();
         },
-        inject: [ConfigService],
-    },
+        inject: [ConfigService]
+    }
 ];
