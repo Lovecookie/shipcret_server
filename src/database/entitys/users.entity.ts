@@ -6,19 +6,19 @@ import { FCommonEntity } from './common.entity';
 
 export enum UserRole {
     ADMIN = 'ADMIN',
-    NORMAL = 'NORMAL',
+    NORMAL = 'NORMAL'
 }
 
 @Entity({
     database: FDatabaseConstants.accountdb(),
-    name: FDatabaseConstants.USERS,
+    name: FDatabaseConstants.USERS_TABLE,
     engine: 'InnoDB',
     orderBy: {
-        useruuid: 'ASC',
-    },
+        useruuid: 'ASC'
+    }
 })
 export class FUserEntity extends FCommonEntity {
-    @PrimaryGeneratedColumn({ type: 'bigint' })
+    @PrimaryGeneratedColumn({ type: 'bigint', comment: 'User UUID' })
     @IsNotEmpty()
     useruuid: string;
 

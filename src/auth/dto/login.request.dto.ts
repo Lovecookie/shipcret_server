@@ -3,5 +3,5 @@ import { FUserDto } from 'src/users/dto/user.dto';
 
 export class FLoginRequestDto extends PickType(FUserDto, [
     'email',
-    'password',
+    'password'
 ] as const) {}

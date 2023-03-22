@@ -12,7 +12,7 @@ import { FDatabaseConstants } from 'src/database/database.constants';
 export class UsersService {
     constructor(
         @Inject(FDatabaseConstants.USER_REPOSITORY)
-        private readonly userRepository: FUserRepository,
+        private readonly userRepository: FUserRepository
     ) {}
 
     async findAll(): Promise<FResponseUserDto[]> {
@@ -45,7 +45,7 @@ export class UsersService {
     }
 
     async findOneByMailAndPassword(
-        signInUserDto: FSignInUserDto,
+        signInUserDto: FSignInUserDto
     ): Promise<FResponseUserDto> {
         const foundOne = await this._findOneByMail(signInUserDto.email);
         if (!foundOne) {
@@ -54,7 +54,7 @@ export class UsersService {
 
         const isPasswordValid = await bcrypt.compare(
             signInUserDto.password,
-            foundOne.password,
+            foundOne.password
         );
         if (!isPasswordValid) {
             throw new UnauthorizedException('Password is invalid!');

@@ -9,15 +9,14 @@ import { _customUserRepository } from '../repositorys/user.repository';
  * @see https://docs.nestjs.com/fundamentals/custom-providers
  */
 
-export const customUserProviders = [
+export const customUserProvider = [
     {
         provide: FDatabaseConstants.USER_REPOSITORY,
         inject: [FDatabaseConstants.DATA_SOURCE],
-
         /**
          * @see https://orkhan.gitbook.io/typeorm/docs/custom-repository
          */
         useFactory: (dataSource: DataSource) =>
-            dataSource.getRepository(FUserEntity).extend(_customUserRepository),
-    },
+            dataSource.getRepository(FUserEntity).extend(_customUserRepository)
+    }
 ];

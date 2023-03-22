@@ -6,18 +6,23 @@ export class FDatabaseConstants {
     static readonly contentdb = () => process.env.CONTENT_DB;
 
     /**
-     * @description This is the name of the user repository.
+     * @description This is the name of database connection.
+     */
+    static readonly DATA_SOURCE = 'DATA_SOURCE';
+
+    /**
+     * @description This is the name of the repositorys.
      */
     static readonly USER_REPOSITORY = 'USER_REPOSITORY';
-    static readonly DATA_SOURCE = 'DATA_SOURCE';
+    static readonly FEED_REPOSITORY = 'FEED_REPOSITORY';
 
     /**
      * @description This is the name of the account table.
      */
-    static readonly USERS = 'users';
+    static readonly USERS_TABLE = 'users';
 
     /**
-     * @description This is the name of the content table.
+     * @description This is the name of the feed table.
      */
-    static readonly FEEDS = 'feeds';
+    static readonly FEEDS_TABLE = 'feeds';
 }

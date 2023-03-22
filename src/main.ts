@@ -5,6 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
 import * as expressBasicAuth from 'express-basic-auth';
+import * as expressSession from 'express-session';
 import * as passport from 'passport';
 import * as cookieParser from 'cookie-parser';
 
@@ -28,7 +29,7 @@ class ShipcretApplication {
         this.port = process.env.SERVER_PORT || '8000';
         this.corsOriginList = process.env.CORS_ORIGIN_LIST
             ? process.env.CORS_ORIGIN_LIST.split(',').map((origin) =>
-                  origin.trim(),
+                  origin.trim()
               )
             : ['*'];
         this.adminUser = process.env.ADMIN_USER || 'schipret';
@@ -41,9 +42,9 @@ class ShipcretApplication {
             expressBasicAuth({
                 challenge: true,
                 users: {
-                    [this.adminUser]: this.adminPassword,
-                },
-            }),
+                    [this.adminUser]: this.adminPassword
+                }
+            })
         );
     }
 
@@ -57,24 +58,33 @@ class ShipcretApplication {
                     .setTitle('SHIPcret - API')
                     .setDescription('The SHIPcret API description')
                     .setVersion('1.0.0')
-                    .build(),
-            ),
+                    .build()
+            )
         );
     }
 
     private _setUpGlobalMiddlewares() {
         this.server.enableCors({
             origin: this.corsOriginList,
-            credentials: true,
+            credentials: true
         });
         this.server.use(cookieParser());
         this._setUpBasicAuth();
         this._setUpOpenApiMiddleware();
         this.server.useGlobalPipes(
             new ValidationPipe({
-                transform: true,
-            }),
+                transform: true
+            })
         );
+
+        this.server.use(
+            expressSession({
+                secret: process.env.SECRET_KEY,
+                resave: true,
+                saveUninitialized: true
+            })
+        );
+
         this.server.use(passport.initialize());
         this.server.use(passport.session());
 
@@ -89,11 +99,11 @@ class ShipcretApplication {
     startLog() {
         if (this.isDev) {
             this.logger.log(
-                `💜💜💜💜💜💜 Server on http://localhost:${this.port} 💜💜💜💜💜💜`,
+                `💜💜💜💜💜💜 Server on http://localhost:${this.port} 💜💜💜💜💜💜`
             );
         } else {
             this.logger.log(
-                `💜💜💜💜💜💜 Server on port ${this.port} 💜💜💜💜💜💜`,
+                `💜💜💜💜💜💜 Server on port ${this.port} 💜💜💜💜💜💜`
             );
         }
     }

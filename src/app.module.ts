@@ -5,12 +5,14 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { AuthModule } from './auth/auth.module';
+import { FeedsModule } from './feeds/feeds.module';
 
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
         UsersModule,
         AuthModule,
+        FeedsModule,
     ],
     controllers: [AppController],
     providers: [AppService],
