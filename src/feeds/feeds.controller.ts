@@ -11,6 +11,7 @@ import { TransformInterceptor } from 'src/common/interceptors/transform.intercep
 import { UsersService } from 'src/users/users.service';
 import { FCreateFeedDto } from './dto/create.feed.dto';
 import { FResponseFeedDto } from './dto/response.feed.dto';
+import { FSearchFeedDto } from './dto/search.feed.dto';
 import { FeedsService } from './feeds.service';
 
 @Controller('feeds')
@@ -18,14 +19,14 @@ import { FeedsService } from './feeds.service';
 export class FeedsController {
     constructor(
         private readonly feedsService: FeedsService,
-        private readonly userService: UsersService
+        private readonly usersService: UsersService
     ) {}
 
     @ApiOperation({ summary: 'create feed' })
     @ApiResponse({})
     @Post('create')
     async create(@Body() createDto: FCreateFeedDto): Promise<FResponseFeedDto> {
-        const userEntity = await this.userService.findOneByMail(
+        const userEntity = await this.usersService.findOneByMail(
             createDto.email
         );
         if (!userEntity) {
@@ -45,8 +46,8 @@ export class FeedsController {
         type: FResponseFeedDto
     })
     @Get('hotFeeds')
-    async hotFeeds() {
-        return await this.feedsService.getHotFeeds();
+    async hotFeeds(@Body() searchFeedDto: FSearchFeedDto) {
+        return await this.feedsService.getHotFeeds(searchFeedDto);
     }
 
     @ApiResponse({
@@ -56,7 +57,13 @@ export class FeedsController {
     })
     @ApiOperation({ summary: 'today hot feeds' })
     @Get('todayHotFeeds')
-    async todayHotFeeds() {
-        return await this.feedsService.getTodayHotFeeds();
+    async todayHotFeeds(@Body() searchFeedDto: FSearchFeedDto) {
+        return await this.feedsService.getTodayHotFeeds(searchFeedDto);
+    }
+
+    @ApiOperation({ summary: 'new feeds' })
+    @Get('friendsFeeds')
+    async friendsFeeds() {
+        return await this.feedsService.getFriendsFeeds();
     }
 }
