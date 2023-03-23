@@ -4,6 +4,7 @@ import { FFeedEntity } from 'src/database/entitys/feeds.entity';
 import { FFeedRepository } from 'src/database/repositorys/feed.repository';
 import { FCreateFeedDto } from './dto/create.feed.dto';
 import { FResponseFeedDto } from './dto/response.feed.dto';
+import { FSearchFeedDto } from './dto/search.feed.dto';
 
 @Injectable()
 export class FeedsService {
@@ -30,8 +31,14 @@ export class FeedsService {
         return FResponseFeedDto.fromFeedEntity(saveEntity);
     }
 
-    async getHotFeeds(): Promise<FResponseFeedDto[]> {
-        const foundEntitys = await this.feedRepository.findHotFeeds();
+    async getFriendsFeeds(useruuid: string) {}
+
+    async getHotFeeds(
+        searchFeedDto: FSearchFeedDto
+    ): Promise<FResponseFeedDto[]> {
+        const foundEntitys = await this.feedRepository.findHotFeeds(
+            searchFeedDto.nextFeedUuid
+        );
         if (foundEntitys.length > 0) {
             return foundEntitys.map((entity) =>
                 FResponseFeedDto.fromFeedEntity(entity)
@@ -41,8 +48,12 @@ export class FeedsService {
         return [];
     }
 
-    async getTodayHotFeeds(): Promise<FResponseFeedDto[]> {
-        const foundEntitys = await this.feedRepository.findTodayHotFeeds();
+    async getTodayHotFeeds(
+        searchFeedDto: FSearchFeedDto
+    ): Promise<FResponseFeedDto[]> {
+        const foundEntitys = await this.feedRepository.findTodayHotFeeds(
+            searchFeedDto.nextFeedUuid
+        );
         if (foundEntitys.length > 0) {
             return foundEntitys.map((entity) =>
                 FResponseFeedDto.fromFeedEntity(entity)

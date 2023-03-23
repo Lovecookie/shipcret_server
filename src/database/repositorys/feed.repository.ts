@@ -5,8 +5,8 @@ export interface FFeedRepository extends Repository<FFeedEntity> {
     this: Repository<FFeedEntity>;
 
     findFeedsByUseruuid(useruuid: string): Promise<FFeedEntity[]>;
-    findHotFeeds(): Promise<FFeedEntity[]>;
-    findTodayHotFeeds(): Promise<FFeedEntity[]>;
+    findHotFeeds(nextFeedUuid: string): Promise<FFeedEntity[]>;
+    findTodayHotFeeds(nextFeedUuid: string): Promise<FFeedEntity[]>;
 }
 
 export const _customFeedRepository: Pick<FFeedRepository, any> = {
@@ -18,10 +18,14 @@ export const _customFeedRepository: Pick<FFeedRepository, any> = {
             .select()
             .execute();
     },
-    findHotFeeds: async function (): Promise<FFeedEntity[]> {
+    findHotFeeds: async function (
+        nextFeedUuid: string
+    ): Promise<FFeedEntity[]> {
         return this.createQueryBuilder().select().execute();
     },
-    findTodayHotFeeds: async function (): Promise<FFeedEntity[]> {
+    findTodayHotFeeds: async function (
+        nextFeedUuid: string
+    ): Promise<FFeedEntity[]> {
         return this.createQueryBuilder().select().execute();
     }
 };

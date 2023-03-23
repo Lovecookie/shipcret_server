@@ -14,7 +14,7 @@ export class FUserDto {
     @ApiProperty({
         example: 'john@mail.com',
         description: 'User email',
-        required: true,
+        required: true
     })
     @IsNotEmpty()
     @IsEmail()
@@ -23,7 +23,7 @@ export class FUserDto {
     @ApiProperty({
         example: '123456',
         description: 'User password',
-        required: true,
+        required: true
     })
     @IsNotEmpty()
     @IsString()

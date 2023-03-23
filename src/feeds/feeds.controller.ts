@@ -64,6 +64,6 @@ export class FeedsController {
     @ApiOperation({ summary: 'new feeds' })
     @Get('friendsFeeds')
     async friendsFeeds() {
-        return await this.feedsService.getFriendsFeeds();
+        // return await this.feedsService.getFriendsFeeds();
     }
 }
