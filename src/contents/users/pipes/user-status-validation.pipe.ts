@@ -1,5 +1,5 @@
 import { BadRequestException, PipeTransform } from '@nestjs/common';
-import { UserRole } from '../../database/entitys/users.entity';
+import { UserRole } from 'src/database/entitys/users.entity';
 
 export class UserStatusValidationPipe implements PipeTransform {
     readonly allowedStatuses = [UserRole.ADMIN, UserRole.NORMAL];

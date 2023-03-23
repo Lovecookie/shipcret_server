@@ -2,9 +2,9 @@ import { forwardRef, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { UsersModule } from 'src/contents/users/users.module';
 import { DatabaseModule } from 'src/database/database.module';
 import { customUserProvider } from 'src/database/providers/user.provider';
-import { UsersModule } from 'src/users/users.module';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt/jwt.strategy';
 

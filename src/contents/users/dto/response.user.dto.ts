@@ -6,7 +6,7 @@ import { FUserDto } from './user.dto';
 export class FResponseUserDto extends PickType(FUserDto, [
     'useruuid',
     'name',
-    'email',
+    'email'
 ] as const) {
     static fromUser(userEntity: FUserEntity): FResponseUserDto {
         const user = new FResponseUserDto();

@@ -7,8 +7,8 @@ import { UsersService } from './users.service';
 
 @Module({
     imports: [DatabaseModule, forwardRef(() => AuthModule)],
-    controllers: [UsersController],
     providers: [...customUserProvider, UsersService],
+    controllers: [UsersController],
     exports: [UsersService]
 })
 export class UsersModule {}
