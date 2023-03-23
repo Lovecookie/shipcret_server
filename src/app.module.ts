@@ -1,11 +1,12 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { AuthModule } from './auth/auth.module';
-import { FeedsModule } from './feeds/feeds.module';
+import { UsersModule } from './contents/users/users.module';
+import { FeedsModule } from './contents/feeds/feeds.module';
+import { FriendsModule } from './contents/friends/friends.module';
 
 @Module({
     imports: [
@@ -13,9 +14,10 @@ import { FeedsModule } from './feeds/feeds.module';
         UsersModule,
         AuthModule,
         FeedsModule,
+        FriendsModule
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [AppService]
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
