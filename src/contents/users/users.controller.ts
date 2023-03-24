@@ -6,11 +6,11 @@ import {
     UseGuards,
     UseInterceptors
 } from '@nestjs/common';
-import { FSignUpUserDto } from './dto/signUp.user.dto';
+import { FSignUpUserDto } from './dto/signUp-user.dto';
 import { UsersService as UsersService } from './users.service';
 import { TransformInterceptor } from 'src/common/interceptors/transform.interceptor';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { FResponseUserDto } from './dto/response.user.dto';
+import { FResponseUserDto } from './dto/response-user.dto';
 import { AuthService as AuthService } from 'src/auth/auth.service';
 import { FLoginRequestDto } from 'src/auth/dto/login.request.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.auth.guard';

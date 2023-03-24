@@ -8,9 +8,9 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { TransformInterceptor } from 'src/common/interceptors/transform.interceptor';
-import { FCreateFeedDto } from './dto/create.feed.dto';
-import { FResponseFeedDto } from './dto/response.feed.dto';
-import { FSearchFeedDto } from './dto/search.feed.dto';
+import { FCreateFeedDto } from './dto/create-feed.dto';
+import { FResponseFeedDto } from './dto/response-feed.dto';
+import { FSearchFeedDto } from './dto/search-feed.dto';
 import { FeedsService } from './feeds.service';
 
 @Controller('feeds')

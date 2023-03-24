@@ -9,9 +9,9 @@ import { FDatabaseConstants } from 'src/database/database.constants';
 import { FFeedEntity } from 'src/database/entitys/feeds.entity';
 import { FFeedRepository } from 'src/database/repositorys/feed.repository';
 import { UsersService } from '../users/users.service';
-import { FCreateFeedDto } from './dto/create.feed.dto';
-import { FResponseFeedDto } from './dto/response.feed.dto';
-import { FSearchFeedDto } from './dto/search.feed.dto';
+import { FCreateFeedDto } from './dto/create-feed.dto';
+import { FResponseFeedDto } from './dto/response-feed.dto';
+import { FSearchFeedDto } from './dto/search-feed.dto';
 
 @Injectable()
 export class FeedsService {

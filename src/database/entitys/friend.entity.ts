@@ -11,7 +11,7 @@ import { FCommonEntity } from './common.entity';
         useruuid: 'ASC'
     }
 })
-export class FFriendsEntity extends FCommonEntity {
+export class FFriendEntity extends FCommonEntity {
     @PrimaryColumn({ type: 'bigint', nullable: false })
     @IsNotEmpty()
     useruuid: string;

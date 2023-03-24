@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UnauthorizedException } from '@nestjs/common/exceptions';
 import { FUserEntity, UserRole } from 'src/database/entitys/users.entity';
-import { FSignUpUserDto } from './dto/signUp.user.dto';
-import { FSignInUserDto } from './dto/signIn.user.dto';
+import { FSignUpUserDto } from './dto/signUp-user.dto';
+import { FSignInUserDto } from './dto/signIn-user.dto';
 import * as bcrypt from 'bcrypt';
-import { FResponseUserDto } from './dto/response.user.dto';
+import { FResponseUserDto } from './dto/response-user.dto';
 import { FUserRepository } from 'src/database/repositorys/user.repository';
 import { FDatabaseConstants } from 'src/database/database.constants';
 
