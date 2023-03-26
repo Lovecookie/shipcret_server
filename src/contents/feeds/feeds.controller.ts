@@ -31,7 +31,7 @@ export class FeedsController {
         description: 'success',
         type: FResponseFeedDto
     })
-    @Get('hotFeeds')
+    @Get('hot-feeds')
     async hotFeeds(@Body() searchFeedDto: FSearchFeedDto) {
         return await this.feedsService.getHotFeeds(searchFeedDto);
     }
@@ -42,13 +42,13 @@ export class FeedsController {
         type: FResponseFeedDto
     })
     @ApiOperation({ summary: 'today hot feeds' })
-    @Get('todayHotFeeds')
+    @Get('today-hot-feeds')
     async todayHotFeeds(@Body() searchFeedDto: FSearchFeedDto) {
         return await this.feedsService.getTodayHotFeeds(searchFeedDto);
     }
 
     @ApiOperation({ summary: 'new feeds' })
-    @Get('friendsFeeds')
+    @Get('friends-feeds')
     async friendsFeeds() {
         // return await this.feedsService.getFriendsFeeds();
     }

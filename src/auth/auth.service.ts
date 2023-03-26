@@ -1,10 +1,10 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { FDatabaseConstants } from 'src/database/database.constants';
 import { FUserRepository } from 'src/database/repositorys/user.repository';
-import { FLoginRequestDto } from './dto/login.request.dto';
+import { FLoginRequestDto } from './dto/login-request.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { FAccessTokenDto } from './dto/access.token.dto';
+import { FAccessTokenDto } from './dto/access-token.dto';
 
 @Injectable()
 export class AuthService {

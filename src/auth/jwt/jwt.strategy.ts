@@ -19,17 +19,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     async validate(payload: FJwtPayload): Promise<FUserEntity> {
         try {
-            console.log('JwtStrategy validate()');
             const userEntity = await this.usersService.findOneByPayload(
                 payload.aud
             );
+
             if (userEntity) {
                 return userEntity;
             } else {
-                throw new UnauthorizedException('jwt is invalid!');
+                throw new UnauthorizedException('not found user');
             }
         } catch (error) {
-            console.log('JwtStrategy UnauthorizedException()');
             throw new UnauthorizedException(error);
         }
     }

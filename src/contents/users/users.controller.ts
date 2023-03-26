@@ -12,13 +12,13 @@ import { TransformInterceptor } from 'src/common/interceptors/transform.intercep
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { FResponseUserDto } from './dto/response-user.dto';
 import { AuthService as AuthService } from 'src/auth/auth.service';
-import { FLoginRequestDto } from 'src/auth/dto/login.request.dto';
+import { FLoginRequestDto } from 'src/auth/dto/login-request.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.auth.guard';
-import { ToResponseUserDto } from 'src/common/decorators/user.decorator';
-import { FAccessTokenDto } from 'src/auth/dto/access.token.dto';
-import { SkipAuthJwt } from 'src/auth/jwt/jwt.public';
+import { FVerifyUser } from 'src/common/decorators/user.decorator';
+import { FAccessTokenDto } from 'src/auth/dto/access-token.dto';
+import { IsPublicAuth } from 'src/auth/jwt/jwt.public';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @UseInterceptors(TransformInterceptor)
 @Controller('users')
 export class UsersController {
@@ -33,18 +33,12 @@ export class UsersController {
         description: 'success',
         type: FResponseUserDto
     })
+    @IsPublicAuth()
     @Post('signup')
     async signUp(
         @Body() signUpUserDto: FSignUpUserDto
     ): Promise<FResponseUserDto> {
         return await this.usersService.create(signUpUserDto);
-    }
-
-    @SkipAuthJwt()
-    @Get('hello')
-    async getHello(): Promise<string> {
-        console.log('123');
-        return 'hello';
     }
 
     @ApiOperation({ summary: 'Sign in' })
@@ -53,6 +47,7 @@ export class UsersController {
         description: 'success',
         type: FAccessTokenDto
     })
+    @IsPublicAuth()
     @Post('signin')
     async signIn(
         @Body() requestDto: FLoginRequestDto
@@ -63,13 +58,11 @@ export class UsersController {
     @ApiOperation({ summary: 'Get user by id' })
     @ApiResponse({
         status: 200,
-        description: 'success',
-        type: FResponseUserDto
+        description: 'success'
     })
     @Get()
-    async GetUser(
-        @ToResponseUserDto() responseUserDto
-    ): Promise<FResponseUserDto> {
-        return responseUserDto;
+    async GetUser(@FVerifyUser() user) {
+        console.log(user);
+        return user;
     }
 }
