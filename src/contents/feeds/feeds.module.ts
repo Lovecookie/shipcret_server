@@ -10,14 +10,7 @@ import { FeedsService } from './feeds.service';
 @Module({
     imports: [DatabaseModule, UsersModule],
     controllers: [FeedsController],
-    providers: [
-        ...customFeedProvider,
-        {
-            provide: APP_GUARD,
-            useClass: JwtAuthGuard
-        },
-        FeedsService
-    ],
+    providers: [...customFeedProvider, FeedsService],
     exports: [FeedsService]
 })
 export class FeedsModule {}

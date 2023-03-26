@@ -9,14 +9,7 @@ import { UsersService } from './users.service';
 
 @Module({
     imports: [DatabaseModule, forwardRef(() => AuthModule)],
-    providers: [
-        ...customUserProvider,
-        {
-            provide: APP_GUARD,
-            useClass: JwtAuthGuard
-        },
-        UsersService
-    ],
+    providers: [...customUserProvider, UsersService],
     controllers: [UsersController],
     exports: [UsersService]
 })
