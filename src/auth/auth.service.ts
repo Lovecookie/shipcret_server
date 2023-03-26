@@ -18,6 +18,7 @@ export class AuthService {
         const userEntity = await this.usersRepository.findOneByEmail(
             requestDto.email
         );
+
         if (!userEntity) {
             throw new UnauthorizedException(
                 'Please check your email and password.'
@@ -34,7 +35,7 @@ export class AuthService {
             );
         }
 
-        const payload = { email: userEntity.email, sub: userEntity.useruuid };
+        const payload = { iss: userEntity.email, aud: userEntity.useruuid };
 
         return {
             access_token: this.jwtService.sign(payload)

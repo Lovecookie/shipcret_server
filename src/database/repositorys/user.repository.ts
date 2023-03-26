@@ -16,21 +16,21 @@ export interface FUserRepository extends Repository<FUserEntity> {
 
 export const _customUserRepository: Pick<FUserRepository, any> = {
     findOneById: async function (useruuid: string): Promise<FUserEntity> {
-        return this.createQueryBuilder()
+        return await this.createQueryBuilder()
             .where('useruuid = :useruuid', { useruuid })
-            .select(['useruuid', 'name', 'email'])
-            .execute();
+            .select()
+            .getOne();
     },
     findOneByEmail: async function (email: string): Promise<FUserEntity> {
-        return this.createQueryBuilder()
+        return await this.createQueryBuilder()
             .where('email = :email', { email })
-            .select(['useruuid', 'name', 'email'])
-            .execute();
+            .select()
+            .getOne();
     },
     findDeleted: async function (useruuid: string): Promise<void> {
-        return this.createQueryBuilder()
+        return await this.createQueryBuilder()
             .where('useruuid = :useruuid', { useruuid })
             .delete()
             .execute();
-    },
+    }
 };

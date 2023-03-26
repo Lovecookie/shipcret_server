@@ -1,4 +1,4 @@
-export type FPayload = {
-    email: string;
-    sub: string;
+export type FJwtPayload = {
+    iss: string; //* email
+    aud: string; //* uuid
 };

@@ -17,7 +17,7 @@ import { JwtStrategy } from './jwt/jwt.strategy';
             inject: [ConfigService],
             useFactory: (configService: ConfigService) => ({
                 secret: configService.get<string>('JWT_SECRET'),
-                signOptions: { expiresIn: '1d' }
+                signOptions: { expiresIn: '1h' }
             })
         }),
         PassportModule.register({ defaultStrategy: 'jwt', session: false }),

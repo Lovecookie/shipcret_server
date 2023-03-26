@@ -19,6 +19,15 @@ export class UsersService {
         return await this.userRepository.find();
     }
 
+    async findOneByPayload(useruuid: string): Promise<FUserEntity> {
+        const userEntity = await this.userRepository.findOneBy({ useruuid });
+        if (!userEntity) {
+            throw new UnauthorizedException('User not found!');
+        }
+
+        return userEntity;
+    }
+
     async findOneByUuid(useruuid: string): Promise<FResponseUserDto> {
         const userEntity = await this.userRepository.findOneBy({ useruuid });
         if (!userEntity) {

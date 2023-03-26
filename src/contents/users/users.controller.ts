@@ -16,9 +16,11 @@ import { FLoginRequestDto } from 'src/auth/dto/login.request.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.auth.guard';
 import { ToResponseUserDto } from 'src/common/decorators/user.decorator';
 import { FAccessTokenDto } from 'src/auth/dto/access.token.dto';
+import { SkipAuthJwt } from 'src/auth/jwt/jwt.public';
 
-@Controller('users')
+@UseGuards(JwtAuthGuard)
 @UseInterceptors(TransformInterceptor)
+@Controller('users')
 export class UsersController {
     constructor(
         private usersService: UsersService,
@@ -36,6 +38,13 @@ export class UsersController {
         @Body() signUpUserDto: FSignUpUserDto
     ): Promise<FResponseUserDto> {
         return await this.usersService.create(signUpUserDto);
+    }
+
+    @SkipAuthJwt()
+    @Get('hello')
+    async getHello(): Promise<string> {
+        console.log('123');
+        return 'hello';
     }
 
     @ApiOperation({ summary: 'Sign in' })
@@ -57,7 +66,6 @@ export class UsersController {
         description: 'success',
         type: FResponseUserDto
     })
-    @UseGuards(JwtAuthGuard)
     @Get()
     async GetUser(
         @ToResponseUserDto() responseUserDto
