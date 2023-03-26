@@ -6,25 +6,27 @@ import { UsersModule } from 'src/contents/users/users.module';
 import { DatabaseModule } from 'src/database/database.module';
 import { customUserProvider } from 'src/database/providers/user.provider';
 import { AuthService } from './auth.service';
-import { JwtStrategy } from './jwt/jwt.strategy';
+import { JwtAuthStrategy } from './jwt/jwt-auth.strategy';
+import { AuthController } from './auth.controller';
+import { JwtRefreshStrategy } from './jwt/jwt-refresh.strategy';
 
 /**
  * @see https://velog.io/@daep93/Nestjs-secretOrPrivateKey-must-have-a-value
  */
 @Module({
     imports: [
-        JwtModule.registerAsync({
-            inject: [ConfigService],
-            useFactory: (configService: ConfigService) => ({
-                secret: configService.get<string>('JWT_SECRET'),
-                signOptions: { expiresIn: '1h' }
-            })
-        }),
-        PassportModule.register({ defaultStrategy: 'jwt', session: false }),
+        JwtModule.register({}),
+        // PassportModule.register({ defaultStrategy: 'jwt', session: false }),
         DatabaseModule,
         forwardRef(() => UsersModule)
     ],
-    providers: [...customUserProvider, AuthService, JwtStrategy],
+    controllers: [AuthController],
+    providers: [
+        ...customUserProvider,
+        AuthService,
+        JwtAuthStrategy,
+        JwtRefreshStrategy
+    ],
     exports: [AuthService]
 })
 export class AuthModule {}

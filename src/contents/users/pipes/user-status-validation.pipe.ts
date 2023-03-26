@@ -1,8 +1,8 @@
 import { BadRequestException, PipeTransform } from '@nestjs/common';
-import { UserRole } from 'src/database/entitys/users.entity';
+import { EUserRole } from 'src/database/entitys/users.entity';
 
 export class UserStatusValidationPipe implements PipeTransform {
-    readonly allowedStatuses = [UserRole.ADMIN, UserRole.NORMAL];
+    readonly allowedStatuses = [EUserRole.ADMIN, EUserRole.NORMAL];
 
     transform(value: any) {
         value = value.toUpperCase();

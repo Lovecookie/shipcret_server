@@ -1,4 +1,6 @@
 export type FJwtPayload = {
     iss: string; //* email
-    aud: string; //* uuid
+    sub: string; //* uuid
 };
+
+export type FJwtRefreshPayload = FJwtPayload & { refreshToken: string };

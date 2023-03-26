@@ -1,7 +1,7 @@
 import { PickType } from '@nestjs/swagger';
-import { FUserDto } from './user.dto';
+import { FUserDto } from '../../contents/users/dto/user.dto';
 
 export class FSignInUserDto extends PickType(FUserDto, [
     'email',
-    'password',
+    'password'
 ] as const) {}

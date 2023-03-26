@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UnauthorizedException } from '@nestjs/common/exceptions';
-import { FUserEntity, UserRole } from 'src/database/entitys/users.entity';
-import { FSignUpUserDto } from './dto/signUp-user.dto';
-import { FSignInUserDto } from './dto/signIn-user.dto';
+import { FUserEntity, EUserRole } from 'src/database/entitys/users.entity';
 import * as bcrypt from 'bcrypt';
 import { FResponseUserDto } from './dto/response-user.dto';
 import { FUserRepository } from 'src/database/repositorys/user.repository';
 import { FDatabaseConstants } from 'src/database/database.constants';
+import { FSignUpUserDto } from 'src/auth/dto/signUp-user.dto';
+import { FSignInUserDto } from 'src/auth/dto/signIn-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -58,7 +58,7 @@ export class UsersService {
         user.name = signUpUserDto.name;
         user.email = signUpUserDto.email;
         user.password = hashedPassword;
-        user.role = UserRole.NORMAL;
+        user.role = EUserRole.NORMAL;
         return await this.userRepository.save(user);
     }
 

@@ -4,4 +4,7 @@ export class FCommonConstants {
 
     static IS_PUBLIC = 'isPublic';
     static TOKEN_BEARER = 'Bearer';
+
+    static JWT_TOKEN = 'jwt-token';
+    static JWT_TOKEN_REFRESH = 'jwt-token-refresh';
 }

@@ -8,7 +8,7 @@ import { FUserRepository } from 'src/database/repositorys/user.repository';
 import { FJwtPayload } from './jwt.payload';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtAuthStrategy extends PassportStrategy(Strategy) {
     constructor(private readonly usersService: UsersService) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     async validate(payload: FJwtPayload): Promise<FUserEntity> {
         try {
             const userEntity = await this.usersService.findOneByPayload(
-                payload.aud
+                payload.sub
             );
 
             if (userEntity) {

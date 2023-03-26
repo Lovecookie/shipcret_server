@@ -4,7 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { FDatabaseConstants } from '../database.constants';
 import { FCommonEntity } from './common.entity';
 
-export enum UserRole {
+export enum EUserRole {
     ADMIN = 'ADMIN',
     NORMAL = 'NORMAL'
 }
@@ -36,6 +36,10 @@ export class FUserEntity extends FCommonEntity {
     @IsStrongPassword()
     @IsNotEmpty()
     password: string;
+
+    @Column({ type: 'varchar', length: 256, nullable: true })
+    @IsNotEmpty()
+    refreshToken: string;
 
     @Column({ type: 'varchar', length: 10, nullable: false })
     @Exclude()
