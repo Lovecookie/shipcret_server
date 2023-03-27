@@ -1,13 +1,9 @@
-import {
-    Inject,
-    Injectable,
-    Post,
-    UnauthorizedException,
-    UseGuards
-} from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { FJwtUser } from 'src/auth/dto/jwt-user.dto';
 import { FDatabaseConstants } from 'src/database/database.constants';
 import { FFeedEntity } from 'src/database/entitys/feeds.entity';
 import { FFeedRepository } from 'src/database/repositorys/feed.repository';
+import { FriendsService } from '../friends/friends.service';
 import { UsersService } from '../users/users.service';
 import { FCreateFeedDto } from './dto/create-feed.dto';
 import { FResponseFeedDto } from './dto/response-feed.dto';
@@ -18,17 +14,15 @@ export class FeedsService {
     constructor(
         @Inject(FDatabaseConstants.FEED_REPOSITORY)
         private readonly feedRepository: FFeedRepository,
-        private readonly usersService: UsersService
+        private readonly usersService: UsersService,
+        private readonly friendsService: FriendsService
     ) {}
 
-    /**
-     *
-     * 임시로 작업.. 나중에 jwt 인증 후 useruuid를 받아서 저장하도록 수정
-     */
-    async createFeed(createDto: FCreateFeedDto): Promise<FResponseFeedDto> {
-        const userEntity = await this.usersService.findOneByMail(
-            createDto.email
-        );
+    async createFeed(
+        jwtUser: FJwtUser,
+        createDto: FCreateFeedDto
+    ): Promise<FFeedEntity> {
+        const userEntity = await this.usersService.findByUuid(jwtUser.useruuid);
         if (!userEntity) {
             throw new UnauthorizedException('invalid email');
         }
@@ -38,23 +32,23 @@ export class FeedsService {
         feedEntity.content = createDto.content;
         feedEntity.useruuid = userEntity.useruuid;
 
-        const saveEntity = await this.feedRepository.save(feedEntity);
-
-        return FResponseFeedDto.fromFeedEntity(saveEntity);
+        return await this.feedRepository.save(feedEntity);
     }
 
-    async getFriendsFeeds(useruuid: string) {}
+    async getFriendsFeeds(jwtUser: FJwtUser): Promise<FFeedEntity[]> {
+        const friendEntitys = await this.friendsService.getFriends(
+            jwtUser.useruuid
+        );
 
-    async getHotFeeds(
-        searchFeedDto: FSearchFeedDto
-    ): Promise<FResponseFeedDto[]> {
+        return [];
+    }
+
+    async getHotFeeds(searchFeedDto: FSearchFeedDto): Promise<FFeedEntity[]> {
         const foundEntitys = await this.feedRepository.findHotFeeds(
             searchFeedDto.nextFeedUuid
         );
         if (foundEntitys.length > 0) {
-            return foundEntitys.map((entity) =>
-                FResponseFeedDto.fromFeedEntity(entity)
-            );
+            return foundEntitys;
         }
 
         return [];
@@ -62,14 +56,12 @@ export class FeedsService {
 
     async getTodayHotFeeds(
         searchFeedDto: FSearchFeedDto
-    ): Promise<FResponseFeedDto[]> {
+    ): Promise<FFeedEntity[]> {
         const foundEntitys = await this.feedRepository.findTodayHotFeeds(
             searchFeedDto.nextFeedUuid
         );
         if (foundEntitys.length > 0) {
-            return foundEntitys.map((entity) =>
-                FResponseFeedDto.fromFeedEntity(entity)
-            );
+            return foundEntitys;
         }
 
         return [];

@@ -11,12 +11,16 @@ export class FriendsService {
     constructor(
         @Inject(FDatabaseConstants.FRIEND_REPOSITORY)
         private readonly friendRepository: FFriendRepository,
-        private readonly usersService: UsersService,
-        private readonly feedService: FeedsService
-    ) {}
+        private readonly usersService: UsersService
+    ) // private readonly feedService: FeedsService
+    {}
+
+    async getFriends(useruuid: string) {
+        throw new Error('Method not implemented.');
+    }
 
     async registFriend(useruuid: string, requestDto: FRequestRegistFriendDto) {
-        const foundUser = await this.usersService.findOneByUuid(
+        const foundUser = await this.usersService.findByUuid(
             requestDto.frienduuid
         );
         if (!foundUser) {

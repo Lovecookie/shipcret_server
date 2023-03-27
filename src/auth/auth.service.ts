@@ -8,10 +8,11 @@ import { FAccessTokenDto } from './dto/access-token.dto';
 import { FJwtToken } from './jwt/jwt-tokens';
 import { FJwtPayload } from './jwt/jwt.payload';
 import { FCommonConstants } from 'src/common/common.constants';
-import { FVerifyUserDto } from './dto/verify-user.dto';
+import { FJwtUser } from './dto/jwt-user.dto';
 import { FSignUpUserDto } from './dto/signUp-user.dto';
 import { FSignInUserDto } from './dto/signIn-user.dto';
 import { EUserRole, FUserEntity } from 'src/database/entitys/users.entity';
+import { UsersService } from 'src/contents/users/users.service';
 
 @Injectable()
 export class AuthService {
@@ -38,14 +39,15 @@ export class AuthService {
             role: EUserRole.NORMAL
         });
 
-        const tokens = await this.createToken(
+        const tokens = await this._createToken(
             userEntity.useruuid,
             userEntity.email
         );
 
-        console.log(`=========> ${tokens}`);
-
-        await this.updateRefreshToken(userEntity.useruuid, tokens.refreshToken);
+        await this._updateRefreshToken(
+            userEntity.useruuid,
+            tokens.refreshToken
+        );
 
         return tokens;
     }
@@ -71,11 +73,11 @@ export class AuthService {
             );
         }
 
-        const tokens = await this.createToken(
+        const tokens = await this._createToken(
             foundUserEntity.useruuid,
             foundUserEntity.email
         );
-        await this.updateRefreshToken(
+        await this._updateRefreshToken(
             foundUserEntity.useruuid,
             tokens.refreshToken
         );
@@ -83,8 +85,36 @@ export class AuthService {
         return tokens;
     }
 
-    async logout(verifyUser: FVerifyUserDto): Promise<void> {
-        await this.updateRefreshTokenNull(verifyUser.useruuid);
+    async logout(verifyUser: FJwtUser): Promise<void> {
+        await this._updateRefreshTokenNull(verifyUser.useruuid);
+    }
+
+    async refreshAccessToken(
+        useruuid: string,
+        refreshToken: string
+    ): Promise<FJwtToken> {
+        const user = await this.usersRepository.findOneBy({ useruuid });
+        if (!user) {
+            throw new UnauthorizedException(
+                'access denied, refresh token not found'
+            );
+        }
+
+        const tokenMatches = await bcrypt.compare(
+            refreshToken,
+            user.refreshToken
+        );
+        if (!tokenMatches) {
+            throw new UnauthorizedException('access denied, token mismatch');
+        }
+
+        const tokens = await this._refreshAccessToken(
+            user.useruuid,
+            user.email,
+            refreshToken
+        );
+
+        return tokens;
     }
 
     async refreshTokens(
@@ -104,13 +134,16 @@ export class AuthService {
             throw new UnauthorizedException('access denied');
         }
 
-        const tokens = await this.createToken(user.useruuid, user.email);
-        await this.updateRefreshToken(user.useruuid, tokens.refreshToken);
+        const tokens = await this._createToken(user.useruuid, user.email);
+        await this._updateRefreshToken(user.useruuid, tokens.refreshToken);
 
         return tokens;
     }
 
-    async updateRefreshToken(useruuid: string, token: string): Promise<void> {
+    private async _updateRefreshToken(
+        useruuid: string,
+        token: string
+    ): Promise<void> {
         const hashedRefreshToken = await bcrypt.hash(token, 10);
 
         await this.usersRepository
@@ -121,7 +154,7 @@ export class AuthService {
             .execute();
     }
 
-    async updateRefreshTokenNull(useruuid: string): Promise<void> {
+    private async _updateRefreshTokenNull(useruuid: string): Promise<void> {
         await this.usersRepository
             .createQueryBuilder()
             .where('useruuid = :useruuid', { useruuid })
@@ -130,7 +163,7 @@ export class AuthService {
             .execute();
     }
 
-    async refreshAccessToken(
+    private async _refreshAccessToken(
         useruuid: string,
         email: string,
         refreshToken: string
@@ -151,7 +184,10 @@ export class AuthService {
         };
     }
 
-    async createToken(useruuid: string, email: string): Promise<FJwtToken> {
+    private async _createToken(
+        useruuid: string,
+        email: string
+    ): Promise<FJwtToken> {
         const payload: FJwtPayload = {
             iss: email,
             sub: useruuid

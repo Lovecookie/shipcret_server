@@ -19,9 +19,7 @@ export class JwtAuthStrategy extends PassportStrategy(Strategy) {
 
     async validate(payload: FJwtPayload): Promise<FUserEntity> {
         try {
-            const userEntity = await this.usersService.findOneByPayload(
-                payload.sub
-            );
+            const userEntity = await this.usersService.findByUuid(payload.sub);
 
             if (userEntity) {
                 return userEntity;

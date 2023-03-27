@@ -1,13 +1,13 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import {
-    FVerifyRefreshUser,
-    FVerifyUser
+    FGetJwtRefreshUser,
+    FGetJwtUser
 } from 'src/common/decorators/jwt-token-verify-user.decorator';
 import { AuthService } from './auth.service';
-import { FRefreshUserDto } from './dto/refresh-token.dto';
+import { FJwtRefreshUserDto } from './dto/refresh-token.dto';
 import { FSignInUserDto } from './dto/signIn-user.dto';
 import { FSignUpUserDto } from './dto/signUp-user.dto';
-import { FVerifyUserDto } from './dto/verify-user.dto';
+import { FJwtUser } from './dto/jwt-user.dto';
 import { JwtAuthGuard } from './jwt/jwt-auth.guard';
 import { JwtRefreshGuard } from './jwt/jwt-refresh.guard';
 import { FJwtToken } from './jwt/jwt-tokens';
@@ -28,16 +28,16 @@ export class AuthController {
 
     @UseGuards(JwtAuthGuard)
     @Post('logout')
-    async logout(@FVerifyUser() verifyUser: FVerifyUserDto): Promise<void> {
+    async logout(@FGetJwtUser() verifyUser: FJwtUser): Promise<void> {
         return await this.authService.logout(verifyUser);
     }
 
     @UseGuards(JwtRefreshGuard)
     @Post('refresh-token')
     async refreshToken(
-        @FVerifyRefreshUser() refreshUser: FRefreshUserDto
+        @FGetJwtRefreshUser() refreshUser: FJwtRefreshUserDto
     ): Promise<FJwtToken> {
-        return await this.authService.refreshTokens(
+        return await this.authService.refreshAccessToken(
             refreshUser.useruuid,
             refreshUser.refreshToken
         );
