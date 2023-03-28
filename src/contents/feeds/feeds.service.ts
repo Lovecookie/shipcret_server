@@ -1,5 +1,5 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { FJwtUser } from 'src/auth/dto/jwt-user.dto';
+import { FGetJwtUserDto } from 'src/auth/dto/get-jwt-user.dto';
 import { FDatabaseConstants } from 'src/database/database.constants';
 import { FFeedEntity } from 'src/database/entitys/feeds.entity';
 import { FFeedRepository } from 'src/database/repositorys/feed.repository';
@@ -19,10 +19,10 @@ export class FeedsService {
     ) {}
 
     async createFeed(
-        jwtUser: FJwtUser,
+        getUser: FGetJwtUserDto,
         createDto: FCreateFeedDto
     ): Promise<FFeedEntity> {
-        const userEntity = await this.usersService.findByUuid(jwtUser.useruuid);
+        const userEntity = await this.usersService.findByUuid(getUser.useruuid);
         if (!userEntity) {
             throw new UnauthorizedException('invalid email');
         }
@@ -35,10 +35,17 @@ export class FeedsService {
         return await this.feedRepository.save(feedEntity);
     }
 
-    async getFriendsFeeds(jwtUser: FJwtUser): Promise<FFeedEntity[]> {
-        const friendEntitys = await this.friendsService.getFriends(
-            jwtUser.useruuid
+    async getFriendsFeeds(getUser: FGetJwtUserDto): Promise<FFeedEntity[]> {
+        const friendUuids = await this.friendsService.getFriendUuids(
+            getUser.useruuid
         );
+
+        const foundFeedEntitys = await this.feedRepository.findFeedsByUseruuids(
+            friendUuids
+        );
+        if (foundFeedEntitys.length > 0) {
+            return foundFeedEntitys;
+        }
 
         return [];
     }

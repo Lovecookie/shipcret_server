@@ -8,7 +8,7 @@ import { FAccessTokenDto } from './dto/access-token.dto';
 import { FJwtToken } from './jwt/jwt-tokens';
 import { FJwtPayload } from './jwt/jwt.payload';
 import { FCommonConstants } from 'src/common/common.constants';
-import { FJwtUser } from './dto/jwt-user.dto';
+import { FGetJwtUserDto } from './dto/get-jwt-user.dto';
 import { FSignUpUserDto } from './dto/signUp-user.dto';
 import { FSignInUserDto } from './dto/signIn-user.dto';
 import { EUserRole, FUserEntity } from 'src/database/entitys/users.entity';
@@ -85,7 +85,7 @@ export class AuthService {
         return tokens;
     }
 
-    async logout(verifyUser: FJwtUser): Promise<void> {
+    async logout(verifyUser: FGetJwtUserDto): Promise<void> {
         await this._updateRefreshTokenNull(verifyUser.useruuid);
     }
 

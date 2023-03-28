@@ -1,4 +1,5 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { FGetJwtUserDto } from 'src/auth/dto/get-jwt-user.dto';
 import { FDatabaseConstants } from 'src/database/database.constants';
 import { FFriendEntity } from 'src/database/entitys/friend.entity';
 import { FFriendRepository } from 'src/database/repositorys/friend.repository';
@@ -12,14 +13,32 @@ export class FriendsService {
         @Inject(FDatabaseConstants.FRIEND_REPOSITORY)
         private readonly friendRepository: FFriendRepository,
         private readonly usersService: UsersService
-    ) // private readonly feedService: FeedsService
-    {}
+    ) {}
 
-    async getFriends(useruuid: string) {
-        throw new Error('Method not implemented.');
+    async getFriends(useruuid: string): Promise<FFriendEntity[]> {
+        const foundEntitys = await this.friendRepository.findBy({
+            useruuid
+        });
+
+        return foundEntitys;
     }
 
-    async registFriend(useruuid: string, requestDto: FRequestRegistFriendDto) {
+    async getFriendUuids(useruuid: string): Promise<string[]> {
+        const foundEntitys = await this.friendRepository.findBy({
+            useruuid
+        });
+
+        const friendUuids = foundEntitys.map((friendEntity) => {
+            return friendEntity.frienduuid;
+        });
+
+        return friendUuids;
+    }
+
+    async registFriend(
+        getUser: FGetJwtUserDto,
+        requestDto: FRequestRegistFriendDto
+    ) {
         const foundUser = await this.usersService.findByUuid(
             requestDto.frienduuid
         );
@@ -29,7 +48,7 @@ export class FriendsService {
 
         const friendEntity = new FFriendEntity();
         friendEntity.frienduuid = requestDto.frienduuid;
-        friendEntity.useruuid = useruuid;
+        friendEntity.useruuid = getUser.useruuid;
 
         await this.friendRepository.save(friendEntity);
 

@@ -13,7 +13,7 @@ import { FResponseUserDto } from './dto/response-user.dto';
 import { AuthService as AuthService } from 'src/auth/auth.service';
 import { FLoginRequestDto } from 'src/auth/dto/login-request.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
-import { FGetJwtUser } from 'src/common/decorators/jwt-token-verify-user.decorator';
+import { FGetUser } from 'src/common/decorators/jwt-token-verify-user.decorator';
 import { FAccessTokenDto } from 'src/auth/dto/access-token.dto';
 import { IsPublicAuth } from 'src/auth/jwt/jwt.public';
 import { FResponseUserAndStateDto } from './dto/response-user-and-state.dto';

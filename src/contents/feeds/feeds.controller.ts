@@ -10,7 +10,7 @@ import {
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { IsPublicAuth } from 'src/auth/jwt/jwt.public';
-import { FGetJwtUser } from 'src/common/decorators/jwt-token-verify-user.decorator';
+import { FGetUser } from 'src/common/decorators/jwt-token-verify-user.decorator';
 import { TransformInterceptor } from 'src/common/interceptors/transform.interceptor';
 import { FCreateFeedDto } from './dto/create-feed.dto';
 import { FResponseFeedDto } from './dto/response-feed.dto';
@@ -27,10 +27,10 @@ export class FeedsController {
     @ApiResponse({})
     @Post('create')
     async create(
-        @FGetJwtUser() jwtUser,
+        @FGetUser() getUser,
         @Body() createDto: FCreateFeedDto
     ): Promise<FResponseFeedDto> {
-        return await this.feedsService.createFeed(jwtUser, createDto);
+        return await this.feedsService.createFeed(getUser, createDto);
     }
 
     @IsPublicAuth()
@@ -79,7 +79,7 @@ export class FeedsController {
 
     @ApiOperation({ summary: 'new feeds' })
     @Get('friends-feeds')
-    async friendsFeeds(@FGetJwtUser() jwtUser) {
-        return await this.feedsService.getFriendsFeeds(jwtUser);
+    async friendsFeeds(@FGetUser() getUser) {
+        return await this.feedsService.getFriendsFeeds(getUser);
     }
 }
