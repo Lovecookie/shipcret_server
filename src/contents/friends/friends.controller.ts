@@ -1,5 +1,6 @@
 import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { FGetUser } from 'src/common/decorators/jwt-token-verify-user.decorator';
 import { TransformInterceptor } from 'src/common/interceptors/transform.interceptor';
 import { FRequestRegistFriendDto } from './dto/request-regist-friend.dto';
 import { FriendsService } from './friends.service';
@@ -15,8 +16,10 @@ export class FriendsController {
         description: 'success'
     })
     @Post('registFriend')
-    async registFriend(@Body() requestDto: FRequestRegistFriendDto) {
-        const testuuid = '1';
-        return await this.friendsService.registFriend(testuuid, requestDto);
+    async registFriend(
+        @FGetUser() getUser,
+        @Body() requestDto: FRequestRegistFriendDto
+    ) {
+        return await this.friendsService.registFriend(getUser, requestDto);
     }
 }
