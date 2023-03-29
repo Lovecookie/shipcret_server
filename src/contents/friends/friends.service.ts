@@ -7,6 +7,7 @@ import { FFriendRepository } from 'src/database/repositorys/friend.repository';
 import { FUserRepository } from 'src/database/repositorys/user.repository';
 import { FeedsService } from '../feeds/feeds.service';
 import { UsersService } from '../users/users.service';
+import { FRequestDeleteFriendDto } from './dto/request-delete-friend.dto';
 import { FRequestRegistFriendDto } from './dto/request-regist-friend.dto';
 
 @Injectable()
@@ -52,7 +53,7 @@ export class FriendsService {
     async registFriend(
         getUser: FGetJwtUserDto,
         requestDto: FRequestRegistFriendDto
-    ) {
+    ): Promise<FUserEntity> {
         const foundUser = await this.usersService.findByUuid(
             requestDto.frienduuid
         );
@@ -67,5 +68,15 @@ export class FriendsService {
         await this.friendRepository.save(friendEntity);
 
         return foundUser;
+    }
+
+    async deleteFriend(
+        getUser: FGetJwtUserDto,
+        requestDto: FRequestDeleteFriendDto
+    ): Promise<void> {
+        await this.friendRepository.deleteFriendBy(
+            getUser.useruuid,
+            requestDto.frienduuid
+        );
     }
 }
