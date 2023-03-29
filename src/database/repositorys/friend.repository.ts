@@ -14,6 +14,6 @@ export const _customFriendRepository: Pick<FFriendRepository, any> = {
         return this.createQueryBuilder()
             .where('useruuid = :useruuid', { useruuid })
             .select()
-            .execute();
+            .getMany();
     }
 };

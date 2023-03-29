@@ -27,13 +27,22 @@ export class UsersController {
     constructor(private usersService: UsersService) {}
 
     @IsPublicAuth()
-    @Get('get-user-info')
-    async getUserInfo(
+    @Get('get-info')
+    async getInfo(
         @Body() requestDto: FRequestFindUserDto
     ): Promise<FResponseUserAndStateDto> {
         const [user, userState] = await this.usersService.getUserAndState(
             requestDto.useruuid
         );
+        return FResponseUserAndStateDto.fromUser(user, userState);
+    }
+
+    @Get('my-info')
+    async getMyInfo(@FGetUser() getUser): Promise<FResponseUserAndStateDto> {
+        const [user, userState] = await this.usersService.getUserAndState(
+            getUser.useruuid
+        );
+
         return FResponseUserAndStateDto.fromUser(user, userState);
     }
 }

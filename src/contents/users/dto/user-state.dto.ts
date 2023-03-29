@@ -13,6 +13,6 @@ export class FUserStateDto {
     @ApiProperty({ description: 'my Friend Count' })
     myFriendCount: number;
 
-    @ApiProperty({ description: 'my Best Frien Count' })
+    @ApiProperty({ description: 'my Best Friend Count' })
     myBestFriendCount: number;
 }

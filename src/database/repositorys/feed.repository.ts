@@ -8,6 +8,7 @@ export interface FFeedRepository extends Repository<FFeedEntity> {
     findFeedsByUseruuids(useruuids: string[]): Promise<FFeedEntity[]>;
     findHotFeeds(nextFeedUuid: string): Promise<FFeedEntity[]>;
     findTodayHotFeeds(nextFeedUuid: string): Promise<FFeedEntity[]>;
+    findRandomFeeds(): Promise<FFeedEntity[]>;
 }
 
 export const _customFeedRepository: Pick<FFeedRepository, any> = {
@@ -36,5 +37,12 @@ export const _customFeedRepository: Pick<FFeedRepository, any> = {
         nextFeedUuid: string
     ): Promise<FFeedEntity[]> {
         return this.createQueryBuilder().select().execute();
+    },
+    findRandomeFeeds: async function (): Promise<FFeedEntity[]> {
+        return this.createQueryBuilder()
+            .select()
+            .orderBy('RAND()')
+            .limit(10)
+            .getMany();
     }
 };

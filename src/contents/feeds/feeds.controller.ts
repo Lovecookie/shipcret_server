@@ -26,7 +26,7 @@ export class FeedsController {
     @ApiOperation({ summary: 'create feed' })
     @ApiResponse({})
     @Post('create')
-    async create(
+    async createFeed(
         @FGetUser() getUser,
         @Body() createDto: FCreateFeedDto
     ): Promise<FResponseFeedDto> {
@@ -40,7 +40,7 @@ export class FeedsController {
         description: 'success',
         type: FResponseFeedDto
     })
-    @Get('hot-feeds')
+    @Get('hot')
     async hotFeeds(
         @Body() searchFeedDto: FSearchFeedDto
     ): Promise<FResponseFeedDto[]> {
@@ -55,13 +55,13 @@ export class FeedsController {
     }
 
     @IsPublicAuth()
+    @ApiOperation({ summary: 'today hot feeds' })
     @ApiResponse({
         status: 200,
         description: 'success',
         type: FResponseFeedDto
     })
-    @ApiOperation({ summary: 'today hot feeds' })
-    @Get('today-hot-feeds')
+    @Get('today-hot')
     async todayHotFeeds(
         @Body() searchFeedDto: FSearchFeedDto
     ): Promise<FResponseFeedDto[]> {
@@ -77,9 +77,39 @@ export class FeedsController {
         return [];
     }
 
-    @ApiOperation({ summary: 'new feeds' })
-    @Get('friends-feeds')
-    async friendsFeeds(@FGetUser() getUser) {
-        return await this.feedsService.getFriendsFeeds(getUser);
+    @IsPublicAuth()
+    @ApiOperation({ summary: 'random feeds' })
+    @ApiResponse({
+        status: 200,
+        description: 'success',
+        type: FResponseFeedDto
+    })
+    @Get('random')
+    async randomFeeds(
+        @Body() searchFeedDto: FSearchFeedDto
+    ): Promise<FResponseFeedDto[]> {
+        const feedEntitys = await this.feedsService.getRandomFeeds(
+            searchFeedDto
+        );
+        if (feedEntitys.length > 0) {
+            return feedEntitys.map((entity) =>
+                FResponseFeedDto.fromFeedEntity(entity)
+            );
+        }
+
+        return [];
+    }
+
+    @ApiOperation({ summary: 'friends feeds' })
+    @Get('friends')
+    async friendsFeeds(@FGetUser() getUser): Promise<FResponseFeedDto[]> {
+        const feedEntitys = await this.feedsService.getFriendsFeeds(getUser);
+        if (feedEntitys.length > 0) {
+            return feedEntitys.map((entity) =>
+                FResponseFeedDto.fromFeedEntity(entity)
+            );
+        }
+
+        return [];
     }
 }

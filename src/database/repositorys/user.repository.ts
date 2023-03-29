@@ -10,6 +10,7 @@ export interface FUserRepository extends Repository<FUserEntity> {
     this: Repository<FUserEntity>;
 
     findOneById(useruuid: string): Promise<FUserEntity>;
+    findByUuids(useruuids: string[]): Promise<FUserEntity[]>;
     findOneByEmail(email: string): Promise<FUserEntity>;
     findDeleted(useruuid: string): Promise<void>;
 }
@@ -20,6 +21,12 @@ export const _customUserRepository: Pick<FUserRepository, any> = {
             .where('useruuid = :useruuid', { useruuid })
             .select()
             .getOne();
+    },
+    findByUuids: async function (useruuids: string[]): Promise<FUserEntity[]> {
+        return await this.createQueryBuilder()
+            .where('useruuid IN (:...useruuids)', { useruuids })
+            .select()
+            .getMany();
     },
     findOneByEmail: async function (email: string): Promise<FUserEntity> {
         return await this.createQueryBuilder()

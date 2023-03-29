@@ -73,4 +73,15 @@ export class FeedsService {
 
         return [];
     }
+
+    async getRandomFeeds(
+        searchFeedDto: FSearchFeedDto
+    ): Promise<FFeedEntity[]> {
+        const foundEntitys = await this.feedRepository.findRandomFeeds();
+        if (foundEntitys.length > 0) {
+            return foundEntitys;
+        }
+
+        return [];
+    }
 }
