@@ -34,23 +34,23 @@ export class AuthService {
 
         const hashedPassword = await bcrypt.hash(signUpUserDto.password, 10);
 
-        const userEntity = await this.usersRepository.save({
+        const newUserEntity = await this.usersRepository.save({
             ...signUpUserDto,
             password: hashedPassword,
             role: EUserRole.NORMAL
         });
 
         const tokens = await this._createToken(
-            userEntity.useruuid,
-            userEntity.email
+            newUserEntity.useruuid,
+            newUserEntity.email
         );
 
         await this._updateRefreshToken(
-            userEntity.useruuid,
+            newUserEntity.useruuid,
             tokens.refreshToken
         );
 
-        return FSignUserInfoDto.fromEntity(foundUserEntity, tokens);
+        return FSignUserInfoDto.fromEntity(newUserEntity, tokens);
     }
 
     async signIn(signInDto: FSignInUserDto): Promise<FSignUserInfoDto> {
