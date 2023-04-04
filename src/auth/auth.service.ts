@@ -13,6 +13,7 @@ import { FSignUpUserDto } from './dto/signUp-user.dto';
 import { FSignInUserDto } from './dto/signIn-user.dto';
 import { EUserRole, FUserEntity } from 'src/database/entitys/users.entity';
 import { UsersService } from 'src/contents/users/users.service';
+import { FSignUserInfoDto } from './dto/sign-user-info.dto';
 
 @Injectable()
 export class AuthService {
@@ -22,7 +23,7 @@ export class AuthService {
         private jwtService: JwtService
     ) {}
 
-    async signUp(signUpUserDto: FSignUpUserDto): Promise<FJwtToken> {
+    async signUp(signUpUserDto: FSignUpUserDto): Promise<FSignUserInfoDto> {
         const foundUserEntity = await this.usersRepository.findOneByEmail(
             signUpUserDto.email
         );
@@ -49,10 +50,10 @@ export class AuthService {
             tokens.refreshToken
         );
 
-        return tokens;
+        return FSignUserInfoDto.fromEntity(foundUserEntity, tokens);
     }
 
-    async signIn(signInDto: FSignInUserDto): Promise<FJwtToken> {
+    async signIn(signInDto: FSignInUserDto): Promise<FSignUserInfoDto> {
         const foundUserEntity = await this.usersRepository.findOneByEmail(
             signInDto.email
         );
@@ -82,7 +83,7 @@ export class AuthService {
             tokens.refreshToken
         );
 
-        return tokens;
+        return FSignUserInfoDto.fromEntity(foundUserEntity, tokens);
     }
 
     async logout(verifyUser: FGetJwtUserDto): Promise<void> {

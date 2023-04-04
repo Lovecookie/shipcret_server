@@ -11,14 +11,14 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { IsPublicAuth } from 'src/auth/jwt/jwt.public';
 import { FGetUser } from 'src/common/decorators/jwt-token-verify-user.decorator';
-import { TransformInterceptor } from 'src/common/interceptors/transform.interceptor';
+import { TransformSuccessInterceptor } from 'src/common/interceptors/transform-success.interceptor';
 import { FCreateFeedDto } from './dto/create-feed.dto';
 import { FResponseFeedDto } from './dto/response-feed.dto';
 import { FSearchFeedDto } from './dto/search-feed.dto';
 import { FeedsService } from './feeds.service';
 
 @UseGuards(JwtAuthGuard)
-@UseInterceptors(TransformInterceptor)
+@UseInterceptors(TransformSuccessInterceptor)
 @Controller('feeds')
 export class FeedsController {
     constructor(private readonly feedsService: FeedsService) {}

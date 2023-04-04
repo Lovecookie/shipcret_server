@@ -7,7 +7,7 @@ import {
     UseInterceptors
 } from '@nestjs/common';
 import { UsersService as UsersService } from './users.service';
-import { TransformInterceptor } from 'src/common/interceptors/transform.interceptor';
+import { TransformSuccessInterceptor } from 'src/common/interceptors/transform-success.interceptor';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { FResponseUserDto } from './dto/response-user.dto';
 import { AuthService as AuthService } from 'src/auth/auth.service';
@@ -21,7 +21,7 @@ import { FRequestFindUserDto } from './dto/request-find-user.dto';
 import { request } from 'http';
 
 @UseGuards(JwtAuthGuard)
-@UseInterceptors(TransformInterceptor)
+@UseInterceptors(TransformSuccessInterceptor)
 @Controller('users')
 export class UsersController {
     constructor(private usersService: UsersService) {}

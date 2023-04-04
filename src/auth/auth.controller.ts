@@ -1,4 +1,10 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Post,
+    UseGuards,
+    UseInterceptors
+} from '@nestjs/common';
 import {
     FGetRefreshUser,
     FGetUser
@@ -11,18 +17,25 @@ import { FGetJwtUserDto } from './dto/get-jwt-user.dto';
 import { JwtAuthGuard } from './jwt/jwt-auth.guard';
 import { JwtRefreshGuard } from './jwt/jwt-refresh.guard';
 import { FJwtToken } from './jwt/jwt-tokens';
+import { TransformSuccessInterceptor } from 'src/common/interceptors/transform-success.interceptor';
+import { FSignUserInfoDto } from './dto/sign-user-info.dto';
 
+@UseInterceptors(TransformSuccessInterceptor)
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
     @Post('signup')
-    async signUp(@Body() signUpUserDto: FSignUpUserDto): Promise<FJwtToken> {
+    async signUp(
+        @Body() signUpUserDto: FSignUpUserDto
+    ): Promise<FSignUserInfoDto> {
         return await this.authService.signUp(signUpUserDto);
     }
 
     @Post('signin')
-    async signIn(@Body() signInUserDto: FSignInUserDto): Promise<FJwtToken> {
+    async signIn(
+        @Body() signInUserDto: FSignInUserDto
+    ): Promise<FSignUserInfoDto> {
         return await this.authService.signIn(signInUserDto);
     }
 
