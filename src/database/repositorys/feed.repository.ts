@@ -1,10 +1,14 @@
 import { Repository } from 'typeorm';
 import { FFeedEntity } from '../entitys/feeds.entity';
+import { FDatabaseConstants } from '../database.constants';
 
 export interface FFeedRepository extends Repository<FFeedEntity> {
     this: Repository<FFeedEntity>;
 
-    findFeedsByUseruuid(useruuid: string): Promise<FFeedEntity[]>;
+    findFeedsByUseruuid(
+        useruuid: string,
+        nextFeeduuid: string
+    ): Promise<FFeedEntity[]>;
     findFeedsByUseruuids(useruuids: string[]): Promise<FFeedEntity[]>;
     findHotFeeds(nextFeedUuid: string): Promise<FFeedEntity[]>;
     findTodayHotFeeds(nextFeedUuid: string): Promise<FFeedEntity[]>;
@@ -13,12 +17,15 @@ export interface FFeedRepository extends Repository<FFeedEntity> {
 
 export const _customFeedRepository: Pick<FFeedRepository, any> = {
     findFeedsByUseruuid: async function (
-        useruuid: string
+        useruuid: string,
+        nextFeeduuid: string
     ): Promise<FFeedEntity[]> {
         return this.createQueryBuilder()
             .where('useruuid = :useruuid', { useruuid })
-            .select()
-            .execute();
+            .andWhere('feeduuid < :nextFeeduuid', { nextFeeduuid })
+            .orderBy('feeduuid', 'DESC')
+            .take(FDatabaseConstants.FEED_NEXT_COUNT)
+            .getMany();
     },
     findFeedsByUseruuids: async function (
         useruuids: string[]

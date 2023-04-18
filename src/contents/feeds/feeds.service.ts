@@ -8,6 +8,7 @@ import { UsersService } from '../users/users.service';
 import { FCreateFeedDto } from './dto/create-feed.dto';
 import { FResponseFeedDto } from './dto/response-feed.dto';
 import { FSearchFeedDto } from './dto/search-feed.dto';
+import { FMyFeedDto } from './dto/my-feed.dto';
 
 @Injectable()
 export class FeedsService {
@@ -33,6 +34,22 @@ export class FeedsService {
         feedEntity.useruuid = userEntity.useruuid;
 
         return await this.feedRepository.save(feedEntity);
+    }
+
+    async getMyFeed(
+        getUser: FGetJwtUserDto,
+        myfeedDto: FMyFeedDto
+    ): Promise<FFeedEntity[]> {
+        const foundFeedEntitys = await this.feedRepository.findFeedsByUseruuid(
+            getUser.useruuid,
+            myfeedDto.nextFeeduuid
+        );
+
+        if (foundFeedEntitys.length <= 0) {
+            return [];
+        }
+
+        return foundFeedEntitys;
     }
 
     async getFriendsFeeds(getUser: FGetJwtUserDto): Promise<FFeedEntity[]> {

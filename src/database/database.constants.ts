@@ -29,4 +29,9 @@ export class FDatabaseConstants {
      * @description This is the name of the feed table.
      */
     static readonly FEEDS_TABLE = 'feeds';
+
+    /**
+     * @description This is db commonc constants.
+     */
+    static readonly FEED_NEXT_COUNT = 10;
 }

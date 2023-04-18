@@ -16,6 +16,7 @@ import { FCreateFeedDto } from './dto/create-feed.dto';
 import { FResponseFeedDto } from './dto/response-feed.dto';
 import { FSearchFeedDto } from './dto/search-feed.dto';
 import { FeedsService } from './feeds.service';
+import { FMyFeedDto } from './dto/my-feed.dto';
 
 @UseGuards(JwtAuthGuard)
 @UseInterceptors(TransformSuccessInterceptor)
@@ -31,6 +32,26 @@ export class FeedsController {
         @Body() createDto: FCreateFeedDto
     ): Promise<FResponseFeedDto> {
         return await this.feedsService.createFeed(getUser, createDto);
+    }
+
+    @ApiOperation({ summary: 'get my feed' })
+    @ApiResponse({})
+    @Get('my-feed')
+    async getMyFeed(
+        @FGetUser() getUser,
+        @Body() myfeedDto: FMyFeedDto
+    ): Promise<FResponseFeedDto[]> {
+        const feedEntity = await this.feedsService.getMyFeed(
+            getUser,
+            myfeedDto
+        );
+        if (feedEntity.length > 0) {
+            return feedEntity.map((entity) =>
+                FResponseFeedDto.fromFeedEntity(entity)
+            );
+        }
+
+        return [];
     }
 
     @IsPublicAuth()

@@ -27,8 +27,8 @@ export class UsersController {
     constructor(private usersService: UsersService) {}
 
     @IsPublicAuth()
-    @Get('get-info')
-    async getInfo(
+    @Get('find-user')
+    async findUser(
         @Body() requestDto: FRequestFindUserDto
     ): Promise<FResponseUserAndStateDto> {
         const [user, userState] = await this.usersService.getUserAndState(
