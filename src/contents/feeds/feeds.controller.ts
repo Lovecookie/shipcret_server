@@ -37,7 +37,7 @@ export class FeedsController {
     @ApiOperation({ summary: 'get my feed' })
     @ApiResponse({})
     @Get('my-feed')
-    async getMyFeed(
+    async myFeed(
         @FGetUser() getUser,
         @Body() myfeedDto: FMyFeedDto
     ): Promise<FResponseFeedDto[]> {

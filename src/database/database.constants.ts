@@ -17,12 +17,14 @@ export class FDatabaseConstants {
     static readonly FEED_REPOSITORY = 'FEED_REPOSITORY';
     static readonly FRIEND_REPOSITORY = 'FRIEND_REPOSITORY';
     static readonly USER_STATE_REPOSITORY = 'USER_STATE_REPOSITORY';
+    static readonly USER_PROFILE_REPOSITORY = 'USER_PROFILE_REPOSITORY';
 
     /**
      * @description This is the name of the account table.
      */
     static readonly USERS_TABLE = 'users';
     static readonly USER_STATE_TABLE = 'user_state';
+    static readonly USER_PROFILE_TABLE = 'user_profile';
     static readonly FRIENDS_TABLE = 'friends';
 
     /**

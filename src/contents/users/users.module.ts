@@ -7,12 +7,14 @@ import { customUserStateProvider } from 'src/database/providers/user-state.provi
 import { customUserProvider } from 'src/database/providers/user.provider';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
+import { customUserProfileProvider } from 'src/database/providers/user-profile.provider';
 
 @Module({
     imports: [DatabaseModule, forwardRef(() => AuthModule)],
     providers: [
         ...customUserProvider,
         ...customUserStateProvider,
+        ...customUserProfileProvider,
         UsersService
     ],
     controllers: [UsersController],

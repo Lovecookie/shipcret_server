@@ -9,6 +9,8 @@ import { FSignUpUserDto } from 'src/auth/dto/signUp-user.dto';
 import { FSignInUserDto } from 'src/auth/dto/signIn-user.dto';
 import { FUserStateRepository } from 'src/database/repositorys/user-state.repository';
 import { FUserStateEntity } from 'src/database/entitys/user-state.entity';
+import { FUserProfileRepository } from 'src/database/repositorys/user-profile.repository';
+import { FResponseUserProfileDto } from './dto/response-user-profile.dto';
 
 @Injectable()
 export class UsersService {
@@ -16,7 +18,9 @@ export class UsersService {
         @Inject(FDatabaseConstants.USER_REPOSITORY)
         private readonly userRepository: FUserRepository,
         @Inject(FDatabaseConstants.USER_STATE_REPOSITORY)
-        private readonly userStateRepository: FUserStateRepository
+        private readonly userStateRepository: FUserStateRepository,
+        @Inject(FDatabaseConstants.USER_PROFILE_REPOSITORY)
+        private readonly userProfileRepository: FUserProfileRepository
     ) {}
 
     async createUserState(useruuid: string): Promise<FUserStateEntity> {
@@ -78,10 +82,30 @@ export class UsersService {
         let userStateEntity = await this.userStateRepository.findOneBy({
             useruuid
         });
+
         if (!userStateEntity) {
             userStateEntity = await this.createUserState(useruuid);
         }
 
         return [userEntity, userStateEntity];
+    }
+
+    async getUserProfile(useruuid: string): Promise<FResponseUserProfileDto> {
+        const [userEntity, userStateEntity] = await this.getUserAndState(
+            useruuid
+        );
+
+        const userProfileEntity = await this.userProfileRepository.findOneBy({
+            useruuid
+        });
+        if (!userProfileEntity) {
+            throw new UnauthorizedException('User profile not found!');
+        }
+
+        return FResponseUserProfileDto.fromUserInfo(
+            userEntity,
+            userStateEntity,
+            userProfileEntity
+        );
     }
 }

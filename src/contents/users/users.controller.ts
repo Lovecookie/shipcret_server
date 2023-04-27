@@ -8,10 +8,6 @@ import {
 } from '@nestjs/common';
 import { UsersService as UsersService } from './users.service';
 import { TransformSuccessInterceptor } from 'src/common/interceptors/transform-success.interceptor';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { FResponseUserDto } from './dto/response-user.dto';
-import { AuthService as AuthService } from 'src/auth/auth.service';
-import { FLoginRequestDto } from 'src/auth/dto/login-request.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { FGetUser } from 'src/common/decorators/jwt-token-verify-user.decorator';
 import { FAccessTokenDto } from 'src/auth/dto/access-token.dto';
@@ -19,6 +15,7 @@ import { IsPublicAuth } from 'src/auth/jwt/jwt.public';
 import { FResponseUserAndStateDto } from './dto/response-user-and-state.dto';
 import { FRequestFindUserDto } from './dto/request-find-user.dto';
 import { request } from 'http';
+import { FResponseUserProfileDto } from './dto/response-user-profile.dto';
 
 @UseGuards(JwtAuthGuard)
 @UseInterceptors(TransformSuccessInterceptor)
@@ -38,11 +35,16 @@ export class UsersController {
     }
 
     @Get('my-info')
-    async getMyInfo(@FGetUser() getUser): Promise<FResponseUserAndStateDto> {
+    async myInfo(@FGetUser() getUser): Promise<FResponseUserAndStateDto> {
         const [user, userState] = await this.usersService.getUserAndState(
             getUser.useruuid
         );
 
         return FResponseUserAndStateDto.fromUser(user, userState);
+    }
+
+    @Get('my-profile')
+    async myProfile(@FGetUser() getUser): Promise<FResponseUserProfileDto> {
+        return await this.usersService.getUserProfile(getUser.useruuid);
     }
 }
