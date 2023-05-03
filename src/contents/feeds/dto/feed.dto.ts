@@ -9,22 +9,26 @@ export class FFeedDto {
     @IsNotEmpty()
     feeduuid: string;
 
-    @ApiProperty({ description: 'Feed Title', example: 'Feed Title' })
+    @ApiProperty({ description: 'Feed Title' })
     @IsNotEmpty()
     @IsString()
     title: string;
 
-    @ApiProperty({ description: 'Feed Content', example: 'Feed Content' })
+    @ApiProperty({ description: 'Feed Content' })
     @IsNotEmpty()
     @IsString()
     content: string;
 
-    @ApiProperty({ description: 'Feed view Count', example: 'Feed view Count' })
+    @ApiProperty({ description: 'Feed content url' })
+    @IsString()
+    contentUrl: string;
+
+    @ApiProperty({ description: 'Feed view Count' })
     @IsNotEmpty()
     @IsNumber()
     viewCount: number;
 
-    @ApiProperty({ description: 'Feed like Count', example: 'Feed like Count' })
+    @ApiProperty({ description: 'Feed like Count' })
     @IsNotEmpty()
     @IsNumber()
     likeCount: number;

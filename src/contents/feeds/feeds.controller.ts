@@ -16,7 +16,8 @@ import { FCreateFeedDto } from './dto/create-feed.dto';
 import { FResponseFeedDto } from './dto/response-feed.dto';
 import { FSearchFeedDto } from './dto/search-feed.dto';
 import { FeedsService } from './feeds.service';
-import { FMyFeedDto } from './dto/my-feed.dto';
+import { FRequestNextFeedDto } from './dto/request-next-feed.dto';
+import { FResponseFeedSummaryDto } from './dto/response-feed-summary.dto';
 
 @UseGuards(JwtAuthGuard)
 @UseInterceptors(TransformSuccessInterceptor)
@@ -39,7 +40,7 @@ export class FeedsController {
     @Get('my-feed')
     async myFeed(
         @FGetUser() getUser,
-        @Body() myfeedDto: FMyFeedDto
+        @Body() myfeedDto: FRequestNextFeedDto
     ): Promise<FResponseFeedDto[]> {
         const feedEntity = await this.feedsService.getMyFeed(
             getUser,
@@ -128,6 +129,23 @@ export class FeedsController {
         if (feedEntitys.length > 0) {
             return feedEntitys.map((entity) =>
                 FResponseFeedDto.fromFeedEntity(entity)
+            );
+        }
+
+        return [];
+    }
+
+    @ApiOperation({ summary: 'feeds Summary' })
+    @Get('feed-summary')
+    async feedSummary(
+        @Body() requestDto: FRequestNextFeedDto
+    ): Promise<FResponseFeedSummaryDto[]> {
+        const feedSummaryEntitys = await this.feedsService.getFeedSummary(
+            requestDto
+        );
+        if (feedSummaryEntitys.length > 0) {
+            return feedSummaryEntitys.map((entity) =>
+                FResponseFeedSummaryDto.fromFeedSummaryEntity(entity)
             );
         }
 

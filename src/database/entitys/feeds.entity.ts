@@ -29,6 +29,10 @@ export class FFeedEntity extends FCommonEntity {
     @IsNotEmpty()
     content: string;
 
+    @Column({ type: 'text', comment: 'Feed content url', nullable: false })
+    @IsNotEmpty()
+    contentUrl: string;
+
     @Column({ type: 'int', comment: 'Feed View Count', default: 0 })
     @IsNotEmpty()
     viewCount: number;

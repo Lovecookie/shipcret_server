@@ -8,7 +8,8 @@ import { UsersService } from '../users/users.service';
 import { FCreateFeedDto } from './dto/create-feed.dto';
 import { FResponseFeedDto } from './dto/response-feed.dto';
 import { FSearchFeedDto } from './dto/search-feed.dto';
-import { FMyFeedDto } from './dto/my-feed.dto';
+import { FRequestNextFeedDto } from './dto/request-next-feed.dto';
+import { FFeedSummaryEntity } from 'src/database/entitys/feed-summary.entity';
 
 @Injectable()
 export class FeedsService {
@@ -38,7 +39,7 @@ export class FeedsService {
 
     async getMyFeed(
         getUser: FGetJwtUserDto,
-        myfeedDto: FMyFeedDto
+        myfeedDto: FRequestNextFeedDto
     ): Promise<FFeedEntity[]> {
         const foundFeedEntitys = await this.feedRepository.findFeedsByUseruuid(
             getUser.useruuid,
@@ -50,6 +51,21 @@ export class FeedsService {
         }
 
         return foundFeedEntitys;
+    }
+
+    async getFeedSummary(
+        requestDto: FRequestNextFeedDto
+    ): Promise<FFeedSummaryEntity[]> {
+        const foundsummaryEntitys =
+            await this.feedRepository.findFeedSummarysByUseruuid(
+                requestDto.useruuid,
+                requestDto.nextFeeduuid
+            );
+        if (foundsummaryEntitys.length <= 0) {
+            return [];
+        }
+
+        return foundsummaryEntitys;
     }
 
     async getFriendsFeeds(getUser: FGetJwtUserDto): Promise<FFeedEntity[]> {

@@ -1,6 +1,7 @@
 import { Repository } from 'typeorm';
 import { FFeedEntity } from '../entitys/feeds.entity';
 import { FDatabaseConstants } from '../database.constants';
+import { FFeedSummaryEntity } from '../entitys/feed-summary.entity';
 
 export interface FFeedRepository extends Repository<FFeedEntity> {
     this: Repository<FFeedEntity>;
@@ -9,6 +10,10 @@ export interface FFeedRepository extends Repository<FFeedEntity> {
         useruuid: string,
         nextFeeduuid: string
     ): Promise<FFeedEntity[]>;
+    findFeedSummarysByUseruuid(
+        useruuid: string,
+        nextFeeduuid: string
+    ): Promise<FFeedSummaryEntity[]>;
     findFeedsByUseruuids(useruuids: string[]): Promise<FFeedEntity[]>;
     findHotFeeds(nextFeedUuid: string): Promise<FFeedEntity[]>;
     findTodayHotFeeds(nextFeedUuid: string): Promise<FFeedEntity[]>;
@@ -21,6 +26,18 @@ export const _customFeedRepository: Pick<FFeedRepository, any> = {
         nextFeeduuid: string
     ): Promise<FFeedEntity[]> {
         return this.createQueryBuilder()
+            .where('useruuid = :useruuid', { useruuid })
+            .andWhere('feeduuid < :nextFeeduuid', { nextFeeduuid })
+            .orderBy('feeduuid', 'DESC')
+            .take(FDatabaseConstants.FEED_NEXT_COUNT)
+            .getMany();
+    },
+    findFeedSummarysByUseruuid(
+        useruuid: string,
+        nextFeeduuid: string
+    ): Promise<FFeedSummaryEntity[]> {
+        return this.createQueryBuilder()
+            .select(['feeduuid', 'contentUrl', 'useruuid'])
             .where('useruuid = :useruuid', { useruuid })
             .andWhere('feeduuid < :nextFeeduuid', { nextFeeduuid })
             .orderBy('feeduuid', 'DESC')

@@ -47,4 +47,12 @@ export class UsersController {
     async myProfile(@FGetUser() getUser): Promise<FResponseUserProfileDto> {
         return await this.usersService.getUserProfile(getUser.useruuid);
     }
+
+    @IsPublicAuth()
+    @Get('user-profile')
+    async userProfile(
+        @Body() requestDto: FRequestFindUserDto
+    ): Promise<FResponseUserProfileDto> {
+        return await this.usersService.getUserProfile(requestDto.useruuid);
+    }
 }
